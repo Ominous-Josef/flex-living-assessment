@@ -1,5 +1,6 @@
 "use client";
 
+import { mockProperties } from "@/lib/mockData";
 import { Building2, MapPin, Star, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +12,11 @@ interface Property {
   address: string;
   averageRating: number;
   totalReviews: number;
+}
+
+interface Review {
+  listingName: string;
+  overallRating: number | null;
 }
 
 export default function PropertiesPage() {
@@ -36,7 +42,7 @@ export default function PropertiesPage() {
           // Group reviews by property and calculate stats
           const propertyStats = new Map<string, { totalReviews: number; totalRating: number; name: string; address: string; }>();
           
-          allReviews.forEach((review: any) => {
+          allReviews.forEach((review: Review) => {
             const propertyName = review.listingName;
             if (!propertyStats.has(propertyName)) {
               propertyStats.set(propertyName, {
@@ -53,7 +59,7 @@ export default function PropertiesPage() {
           });
 
           // Convert to properties array
-          const propertiesData: Property[] = Array.from(propertyStats.entries()).map(([name, stats], index) => ({
+          const propertiesData: Property[] = Array.from(propertyStats.entries()).map(([, stats], index) => ({
             id: `prop_${index + 1}`,
             name: stats.name,
             address: stats.address,
@@ -64,13 +70,13 @@ export default function PropertiesPage() {
           setProperties(propertiesData);
         } else {
           // Fallback to mock data if API fails
-          // setProperties(mockProperties);
+          setProperties(mockProperties);
         }
       } catch (err) {
         console.error('Error fetching properties:', err);
         setError('Failed to load properties');
         // Fallback to mock data on error
-        // setProperties(mockProperties);
+        setProperties(mockProperties);
       } finally {
         setLoading(false);
       }

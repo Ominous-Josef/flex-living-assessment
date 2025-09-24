@@ -1,7 +1,7 @@
 "use client";
 
 import { mockProperties, mockReviews } from "@/lib/mockData";
-import { DashboardFilters, Property, Review } from "@/lib/types";
+import { DashboardFilters } from "@/lib/types";
 import {
   Building,
   CheckCircle,
@@ -12,15 +12,9 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
-interface DashboardProps {
-  reviews?: Review[];
-  properties?: Property[];
-}
-
-export default function Dashboard({
-  reviews = mockReviews,
-  properties = mockProperties,
-}: DashboardProps) {
+export default function Dashboard() {
+  const reviews = mockReviews;
+  const properties = mockProperties;
   const [filters, setFilters] = useState<DashboardFilters>({
     approvalStatus: "all",
   });
